@@ -79,6 +79,8 @@ $addNewTag = static function ($tag, $versionBumpType): void {
 
     } while ($releaseName === '');
 
+    $releaseNotes = '';
+
     $done = false;
 
     ColorCode::colorCode('Please add additional notes (type "done" alone on a new line to complete):', iColorCode::MAGENTA);

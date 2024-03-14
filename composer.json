@@ -1,11 +1,11 @@
 {
-    "name": "richardmiles/php-git-hooks",
+    "name": "richardtmiles/php-git-hooks",
     "description": "version and release management",
     "type": "library",
     "license": "mit",
     "require": {
         "php": ">=8.2",
-        "carbonorm/carbonphp": "dev-lts"
+        "carbonorm/carbonphp": ">=20.1.9"
     },
     "scripts": {
         "make": [
@@ -28,6 +28,5 @@
             "email": "richard@miles.systems"
         }
     ],
-    "minimum-stability": "dev",
-    "require": {}
+    "minimum-stability": "dev"
 }

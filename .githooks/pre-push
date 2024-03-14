@@ -35,7 +35,7 @@ $addNewTag = static function ($tag, $versionBumpType): void {
 
         $responseCode = Background::executeAndCheckStatus("grep -q '\"version\":' $rootDir/composer.json", false);
 
-        if (0 !== $responseCode) {
+        if (0 === $responseCode) {
 
             Background::executeAndCheckStatus("sed -i '' 's/\"version\": \".*\"/\"version\": \"$tag\"/' $rootDir/composer.json");
 
@@ -45,8 +45,7 @@ $addNewTag = static function ($tag, $versionBumpType): void {
 
         }
 
-
-        // todo get the last major / minor release name and add it to patches automagically
+        // todo - get the last major / minor release name and add it to patches automagically
         Background::executeAndCheckStatus("git tag -s -a $tag -m \"release: (" . $releaseName . ") revision: ($tag)\ notes: ($releaseNotes)\"");
 
         ColorCode::colorCode('Attempting to commit a TAG mid GitHook. Output in the CLI will show two pushes to git. This is expected.', iColorCode::MAGENTA);

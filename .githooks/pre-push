@@ -267,6 +267,8 @@ SEMVAR
 
     }
 
+    sortDump($versionBumpType);
+
     if (empty($versionBumpType)) {
 
         ColorCode::colorCode("Skipping version bump.", iColorCode::CYAN);

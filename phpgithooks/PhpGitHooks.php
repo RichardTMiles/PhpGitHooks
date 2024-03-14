@@ -1,12 +1,12 @@
 <?php
 
-namespace phpgithooks;
+namespace PhpGitHooks;
 
 use CarbonPHP\Abstracts\Background;
 
 class PhpGitHooks
 {
-    public static function make(): void
+    public static function install(): void
     {
 
         echo 'file://' . __FILE__ . ':' . __LINE__ . PHP_EOL;

@@ -34,7 +34,7 @@ $addNewTag = static function ($tag, $versionBumpType): void {
 
         }
 
-        $rootDir = dirname(__DIR__);
+        $rootDir = `git rev-parse --show-toplevel`;
 
         $responseCode = Background::executeAndCheckStatus("grep -q '\"version\":' $rootDir/composer.json", false);
 

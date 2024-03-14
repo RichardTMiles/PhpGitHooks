@@ -79,14 +79,6 @@ $addNewTag = static function ($tag, $versionBumpType): void {
 
     } while ($releaseName === '');
 
-    do {
-
-        ColorCode::colorCode("Enter release notes and use/reference ($releaseName) (@link: https://github.com/RichardTMiles/CarbonPHP/releases)", iColorCode::MAGENTA);
-
-        $releaseNotes = `exec < /dev/tty && php -r 'echo (\$r = readline()) ? \$r : "";'`;
-
-    } while ($releaseNotes === '');
-
     $done = false;
 
     ColorCode::colorCode('Please add additional notes (type "done" alone on a new line to complete):', iColorCode::MAGENTA);

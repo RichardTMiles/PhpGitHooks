@@ -31,24 +31,33 @@ $addNewTag = static function ($tag, $versionBumpType): void {
 
     $pushTags = static function($tag, $releaseName = 'patch', $releaseNotes = '') {
 
-        $rootDir = dirname(__DIR__);
+        if (empty($releaseNotes)) {
 
-        Background::executeAndCheckStatus("sed -i '' 's/\"version\": \".*\"/\"version\": \"$tag\"/' $rootDir/composer.json");
-
-        Background::executeAndCheckStatus("git add $rootDir/composer.json && git commit -m \"Changing our version in composer.json to ($tag).\"");
-
-        // todo get the last major / minor release name and add it to patches automagically
-        Background::executeAndCheckStatus("git tag -s -a $tag -m \"release: (" . $releaseName . ") revision: ($tag)\ notes: ($releaseNotes)\"");
-
-        ColorCode::colorCode('Going to commit a TAG mid GitHook. Output in the CLI will show two pushes to git. This is expected.', iColorCode::MAGENTA);
-
-        Background::executeAndCheckStatus("git push --tags --no-verify");
-
-        if ('patch' === $releaseName) {
-
-            return;
+            $releaseNotes = 'No release notes were provided.';
 
         }
+
+        $rootDir = dirname(__DIR__);
+
+        Background::executeAndCheckStatus(/** @lang Shell Script */ <<<BASH
+
+set -e
+
+if grep -q '"version": ' $rootDir/composer.json; then
+    sed -i '' 's/\"version\": \".*\"/\"version\": \"$tag\"/' $rootDir/composer.json
+    git add $rootDir/composer.json 
+    git commit -m "Changing our version in composer.json to ($tag)."
+else
+  echo "composer.json has no version entry. This package (richardtmiles/php-git-hooks) will manage this enrty for you."
+fi
+
+git tag -s -a $tag -m "release: ( $releaseName) revision: ($tag) notes: ($releaseNotes)";
+
+echo -e "\033[35mAtempting to commit a TAG mid GitHook. Output in the CLI will show two pushes to git. This is expected.\033[0m";
+
+git push --tags --no-verify
+
+BASH);
 
         Background::executeAndCheckStatus("gh release create $tag --title '" . preg_quote($releaseName, "'") . "' --notes '" . preg_quote($releaseNotes, "'") . "'");
 
@@ -66,7 +75,7 @@ $addNewTag = static function ($tag, $versionBumpType): void {
 
     }
 
-    ColorCode::colorCode('Please enter release name (bolder,maverick,fire,etc):', iColorCode::MAGENTA);
+    ColorCode::colorCode('Please enter release name (bolder,maverick,fire,<random>):', iColorCode::MAGENTA);
 
     do {
 

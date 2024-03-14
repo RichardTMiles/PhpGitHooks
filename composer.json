@@ -9,14 +9,8 @@
         "carbonorm/carbonphp": ">=20.1.9"
     },
     "scripts": {
-        "make": [
-            "git config core.hooksPath .githooks",
-            "chmod +x .githooks/*",
-            "echo 'Updated git hooks to use php-git-hooks in .githooks directory.'",
-            "git config core.hooksPath"
-        ],
-        "post-install-cmd": "@make",
-        "post-update-cmd": "@make"
+        "post-install-cmd": "PhpGitHooks\\PhpGitHooks::install",
+        "post-update-cmd": "PhpGitHooks\\PhpGitHooks::install"
     },
     "autoload": {
         "psr-4": {

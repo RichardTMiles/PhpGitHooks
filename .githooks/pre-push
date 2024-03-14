@@ -12,9 +12,6 @@ require 'common.php';
 $statusCode = 0;
 
 // @note we readline in php using a shell exec ``; doing it directly will fail with unexpected behavior
-
-// todo - make a changelog and verify tag exists before publishing
-
 // Background::executeAndCheckStatus('composer run test');
 
 passthru('git fetch --tags', $statusCode);
@@ -30,6 +27,12 @@ if (0 !== $statusCode) {
 $addNewTag = static function ($tag, $versionBumpType): void {
 
     $pushTags = static function($tag, $releaseName = 'patch', $releaseNotes = '') {
+
+        if (empty($releaseNotes)) {
+
+            $releaseNotes = 'No release notes were provided.';
+
+        }
 
         $rootDir = dirname(__DIR__);
 

@@ -1,5 +1,7 @@
 <?php
 
+use CarbonPHP\Abstracts\Composer;
+
 $autoloadPath = __DIR__;
 
 $found = false;
@@ -22,7 +24,17 @@ while (!$found && $autoloadPath !== DIRECTORY_SEPARATOR) { // Prevent infinite l
 
 if ($found) {
 
-    require_once $autoloadFile;
+    $autoload = include $autoloadFile;
+
+    if (false === $autoload) {
+
+        print '<h1>Failed to load composer dependencies.</h1>';
+
+        die(1);
+
+    }
+
+    Composer::$loader = $autoload;
 
 } else {
 

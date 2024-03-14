@@ -257,7 +257,7 @@ SEMVAR
 
     ColorCode::colorCode('Enter version bump type (major, minor, patch, skip [default]): ');
 
-    $versionBumpType = `exec < /dev/tty && php -r 'echo (\$r = readline()) ? \$r : "patch";'`;
+    $versionBumpType = `exec < /dev/tty && php -r 'echo (\$r = readline()) ? \$r : "skip";'`;
 
     if (false === $versionBumpType) {
 
@@ -267,17 +267,13 @@ SEMVAR
 
     }
 
-    sortDump($versionBumpType);
-
     if (empty($versionBumpType)) {
 
-        ColorCode::colorCode("Skipping version bump.", iColorCode::CYAN);
-
-        exit(0);
+        $versionBumpType = 'skip';
 
     }
 
-    if (!in_array($versionBumpType, ['major', 'minor', 'patch'])) {
+    if (!in_array($versionBumpType, ['major', 'minor', 'patch', 'skip'])) {
 
         ColorCode::colorCode("Invalid version bump type ($versionBumpType). Please try again.", iColorCode::RED);
 
@@ -286,6 +282,10 @@ SEMVAR
     }
 
     switch ($versionBumpType) {
+        default:
+        case 'skip':
+
+            exit(0);
 
         case 'major':
 
@@ -305,7 +305,6 @@ SEMVAR
 
             return $versionBumpType;
 
-        default:
         case 'patch':
 
             $revision_exploded[2]++;

@@ -49,7 +49,7 @@ $addNewTag = static function ($tag, $versionBumpType): void {
         }
 
         // todo - get the last major / minor release name and add it to patches automagically
-        Background::executeAndCheckStatus("git tag -s -a $tag -m \"release: (" . $releaseName . ") revision: ($tag)\ notes: ($releaseNotes)\"");
+        Background::executeAndCheckStatus("git tag -s -a $tag -m \"release: (" . $releaseName . ") revision: ($tag) notes: ($releaseNotes)\"");
 
         ColorCode::colorCode('Attempting to commit a TAG mid GitHook. Output in the CLI will show two pushes to git. This is expected.', iColorCode::MAGENTA);
 
@@ -101,7 +101,7 @@ $addNewTag = static function ($tag, $versionBumpType): void {
 
         } else {
 
-            $releaseNotes .= $line;
+            $releaseNotes .= $line . PHP_EOL;
 
         }
 

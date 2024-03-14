@@ -14,7 +14,7 @@ class PhpGitHooks
         $directory = dirname(__DIR__) . DIRECTORY_SEPARATOR . '.githooks';
 
         $commands = [
-            "git config core.hooksPath .githooks",
+            "git config core.hooksPath $directory",
             "chmod +x $directory/*",
             "echo 'Updated git hooks to use php-git-hooks in ($directory) directory.'",
             "git config core.hooksPath"

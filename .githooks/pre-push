@@ -199,6 +199,8 @@ if (count($revision_exploded) !== 3) {
 
 $bumpCurrentRevision = static function () use (&$revision_exploded): string {
 
+    $revision = implode('.', $revision_exploded);
+
     ColorCode::colorCode(<<<SEMVAR
 Semantic Versioning Specification (SemVer) (Directly from https://semver.org/)
 The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in RFC 2119.
@@ -247,6 +249,7 @@ The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL 
 
     Example: 1.0.0-alpha < 1.0.0-alpha.1 < 1.0.0-alpha.beta < 1.0.0-beta < 1.0.0-beta.2 < 1.0.0-beta.11 < 1.0.0-rc.1 < 1.0.0.
 
+    Current: $revision
 SEMVAR
     );
 

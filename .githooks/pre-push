@@ -55,7 +55,7 @@ $addNewTag = static function ($tag, $versionBumpType): void {
 
         Background::executeAndCheckStatus("git push --tags --no-verify");
 
-        Background::executeAndCheckStatus("gh release create $tag --title \"" . preg_quote($releaseName, '"') . '" --notes "' . preg_quote($releaseNotes, "'") . '"');
+        Background::executeAndCheckStatus("gh release create $tag --title \"" . preg_quote($releaseName, '"') . '" --notes "' . preg_quote($releaseNotes, '"') . '"');
 
     };
 

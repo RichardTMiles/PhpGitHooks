@@ -285,6 +285,8 @@ SEMVAR
         default:
         case 'skip':
 
+            ColorCode::colorCode('Skipping version bump.', iColorCode::CYAN);
+
             exit(0);
 
         case 'major':

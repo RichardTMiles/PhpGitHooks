@@ -1,0 +1,33 @@
+{
+    "name": "richardmiles/php-git-hooks",
+    "description": "version and release management",
+    "type": "library",
+    "license": "mit",
+    "require": {
+        "php": ">=8.2",
+        "carbonorm/carbonphp": "dev-lts"
+    },
+    "scripts": {
+        "make": [
+            "git config core.hooksPath .githooks",
+            "chmod +x .githooks/*",
+            "echo 'Updated git hooks to use php-git-hooks in .githooks directory.'",
+            "git config core.hooksPath"
+        ],
+        "post-install-cmd": "@make",
+        "post-update-cmd": "@make"
+    },
+    "autoload": {
+        "psr-4": {
+            "PhpGitHooks\\": "phpgithooks/"
+        }
+    },
+    "authors": [
+        {
+            "name": "richardtmiles",
+            "email": "richard@miles.systems"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}

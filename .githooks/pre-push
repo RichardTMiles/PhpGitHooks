@@ -252,7 +252,7 @@ SEMVAR
 
     ColorCode::colorCode('Enter version bump type (major, minor, patch, skip [default]): ');
 
-    $versionBumpType = `exec < /dev/tty && php -r 'echo (\$r = readline()) ? \$r : "skip";'`;
+    $versionBumpType = trim(`exec < /dev/tty && php -r 'echo (\$r = readline()) ? \$r : "skip";'`);
 
     if (false === $versionBumpType) {
 

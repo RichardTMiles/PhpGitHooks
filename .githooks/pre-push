@@ -7,9 +7,26 @@ use CarbonPHP\Interfaces\iColorCode;
 
 require 'common.php';
 
+
 [$cmd, $remote, $url] = $argv;
 
 $statusCode = 0;
+
+function getElementName(int $number): string
+{
+    static $elements;
+    if (empty($elements)) {
+        $elements = include 'elements.php';
+    }
+    $names = [];
+    while ($number > 118) {
+        array_unshift($names, $elements[118]);
+        $number -= 118;
+    }
+    array_unshift($names, $elements[$number]);
+    return implode(' + ', $names);
+}
+
 
 // @note we readline in php using a shell exec ``; doing it directly will fail with unexpected behavior
 // Background::executeAndCheckStatus('composer run test');
@@ -24,9 +41,9 @@ if (0 !== $statusCode) {
 
 }
 
-$addNewTag = static function ($tag, $versionBumpType): void {
+$addNewTag = static function ($tag, $versionBumpType, $name): void {
 
-    $pushTags = static function($tag, $releaseName = 'patch', $releaseNotes = '') {
+    $pushTags = static function ($tag, $releaseName = 'patch', $releaseNotes = '') {
 
         if (empty($releaseNotes)) {
 
@@ -63,7 +80,7 @@ $addNewTag = static function ($tag, $versionBumpType): void {
 
     if ($versionBumpType === 'patch') {
 
-        $pushTags($tag);
+        $pushTags($tag, "$name ($versionBumpType)", $name);
 
         ColorCode::colorCode("Pushing Git Tag ($tag) Finished (patch).");
 
@@ -71,19 +88,22 @@ $addNewTag = static function ($tag, $versionBumpType): void {
 
     }
 
-    ColorCode::colorCode('Please enter release name (bolder,maverick,fire,etc):', iColorCode::MAGENTA);
+    ColorCode::colorCode("Please enter release name (defaults to: '$name'):", iColorCode::MAGENTA);
 
-    do {
 
-        $releaseName = `exec < /dev/tty && php -r 'echo (\$r = readline()) ? "Release Name (\$r)" : "";'`;
+    $releaseName = `exec < /dev/tty && php -r 'echo (\$r = readline()) ? "Release Name (\$r)" : "";'`;
 
-    } while ($releaseName === '');
+    if ('' === $releaseName) {
+
+        $releaseName = "$name ($versionBumpType)";
+
+    }
 
     $releaseNotes = '';
 
     $done = false;
 
-    ColorCode::colorCode('Please add additional notes (type "done" alone on a new line to complete):', iColorCode::MAGENTA);
+    ColorCode::colorCode("Please add additional notes for ($releaseName) (type 'done' alone on a new line to complete):", iColorCode::MAGENTA);
 
     do {
 
@@ -196,8 +216,7 @@ if (count($revision_exploded) !== 3) {
 
 }
 
-
-$bumpCurrentRevision = static function () use (&$revision_exploded): string {
+$bumpCurrentRevision = static function () use (&$revision_exploded): array {
 
     $revision = implode('.', $revision_exploded);
 
@@ -281,6 +300,10 @@ SEMVAR
 
     }
 
+    $revisionName = static function () use ($versionBumpType, &$revision_exploded) {
+        return [$versionBumpType, getElementName($revision_exploded[0]) . ' .  ' . getElementName($revision_exploded[1]) . ' .  ' . getElementName($revision_exploded[2])];
+    };
+
     switch ($versionBumpType) {
         default:
         case 'skip':
@@ -297,7 +320,7 @@ SEMVAR
 
             $revision_exploded[2] = 0;
 
-            return $versionBumpType;
+            return $revisionName();
 
         case 'minor':
 
@@ -305,22 +328,21 @@ SEMVAR
 
             $revision_exploded[2] = 0;
 
-            return $versionBumpType;
+            return $revisionName();
 
         case 'patch':
 
             $revision_exploded[2]++;
 
-            return $versionBumpType;
+            return $revisionName();
 
     }
 
 };
 
-
 do {
 
-    $versionBumpType = $bumpCurrentRevision();
+    [$versionBumpType, $name] = $bumpCurrentRevision();
 
     $tag = implode('.', $revision_exploded);
 
@@ -330,5 +352,5 @@ do {
 
 } while (null !== $revisionExists && '' !== trim($revisionExists));
 
-$addNewTag($tag, $versionBumpType);
+$addNewTag($tag, $versionBumpType, $name);
 

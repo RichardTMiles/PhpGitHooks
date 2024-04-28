@@ -66,13 +66,13 @@ $addNewTag = static function ($tag, $versionBumpType, $name): void {
         }
 
         // todo - get the last major / minor release name and add it to patches automagically
-        Background::executeAndCheckStatus("git tag -s -a $tag -m \"release: (" . preg_quote( $releaseName, '"') . ") revision: ($tag) notes: (".preg_quote($releaseNotes, '"').")\"");
+        Background::executeAndCheckStatus("git tag -s -a $tag -m \"release: (" . str_replace('"', '\"', $releaseName) . ") revision: ($tag) notes: (" . str_replace('"', '\"', $releaseNotes) . ")\"");
 
         ColorCode::colorCode('Attempting to commit a TAG mid GitHook. Output in the CLI will show two pushes to git. This is expected.', iColorCode::MAGENTA);
 
         Background::executeAndCheckStatus("git push --tags --no-verify");
 
-        Background::executeAndCheckStatus("gh release create $tag --title \"" . preg_quote($releaseName, '"') . '" --notes "' . preg_quote($releaseNotes, '"') . '"');
+        Background::executeAndCheckStatus("gh release create $tag --title \"" . str_replace('"', '\"', $releaseName) . '" --notes "' . str_replace('"', '\"', $releaseNotes) . '"');
 
     };
 

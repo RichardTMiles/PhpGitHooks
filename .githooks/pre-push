@@ -37,7 +37,7 @@ if (0 !== $statusCode) {
 
     ColorCode::colorCode("Failed to pull git hooks.\nHint: if you see `(would clobber existing tag)` above, run `git tag -d [TAG];` where tag is the version number. ie 0.0.0", iColorCode::RED);
 
-    exit(1);
+    exit($statusCode);
 
 }
 
@@ -66,7 +66,7 @@ $addNewTag = static function ($tag, $versionBumpType, $name): void {
         }
 
         // todo - get the last major / minor release name and add it to patches automagically
-        Background::executeAndCheckStatus("git tag -s -a $tag -m \"release: (" . $releaseName . ") revision: ($tag) notes: ($releaseNotes)\"");
+        Background::executeAndCheckStatus("git tag -s -a $tag -m \"release: (" . preg_quote( $releaseName, '"') . ") revision: ($tag) notes: (".preg_quote($releaseNotes, '"').")\"");
 
         ColorCode::colorCode('Attempting to commit a TAG mid GitHook. Output in the CLI will show two pushes to git. This is expected.', iColorCode::MAGENTA);
 

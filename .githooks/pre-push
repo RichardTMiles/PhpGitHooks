@@ -153,7 +153,7 @@ $revisionCheck = static function () use ($cmd, &$revisionCheck, $addNewTag): str
         $revision = '0.0.0';
 
         // push the first tag to the remote
-        $addNewTag($revision, 'major');
+        $addNewTag($revision, 'major', 'Initial Release');
 
     }
 
@@ -301,7 +301,7 @@ SEMVAR
     }
 
     $revisionName = static function () use ($versionBumpType, &$revision_exploded) {
-        return [$versionBumpType, getElementName($revision_exploded[0]) . ' .  ' . getElementName($revision_exploded[1]) . ' .  ' . getElementName($revision_exploded[2])];
+        return [$versionBumpType, getElementName($revision_exploded[0]) . ' + ' . getElementName($revision_exploded[1]) . ' + ' . getElementName($revision_exploded[2])];
     };
 
     switch ($versionBumpType) {

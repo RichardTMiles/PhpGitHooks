@@ -1,6 +1,6 @@
 {
     "name": "richardtmiles/php-git-hooks",
-    "version": "3.0.0",
+    "version": "3.1.0",
     "description": "version and release management",
     "type": "library",
     "license": "mit",

@@ -43,7 +43,7 @@ if (0 !== $statusCode) {
 
 $addNewTag = static function ($tag, $versionBumpType, $name): void {
 
-    $pushTags = static function ($tag, $releaseName = 'patch', $releaseNotes = '') {
+    $pushTags = static function (string $tag, string $releaseName = 'patch', string $releaseNotes = '') {
 
         if (empty($releaseNotes)) {
 
@@ -93,7 +93,7 @@ $addNewTag = static function ($tag, $versionBumpType, $name): void {
 
     $releaseName = `exec < /dev/tty && php -r 'echo (\$r = readline()) ? "Release Name (\$r)" : "";'`;
 
-    if ('' === $releaseName) {
+    if (empty($releaseName)) {
 
         $releaseName = "$name ($versionBumpType)";
 
